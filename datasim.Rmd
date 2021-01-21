@@ -1,0 +1,42 @@
+---
+title: "thes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(splatter)
+#browseVignettes("splatter")
+library("scater")
+library("ggplot2")
+library("tidyverse")
+
+```
+
+
+
+
+
+
+```{r}
+set.seed(1000)
+sce <- mockSCE()
+sce
+params <- splatEstimate(sce)
+
+params.group<-newSplatParams(nGenes=100,batchCells=c(20,20,20,20),batch.facLoc = 1, batch.facScale = 1, group.prob=c(0.5,0.5))
+
+sim1 <- splatSimulateGroups(params.group)
+sim1
+params.group
+counts<-counts(sim1)
+counts<-as.data.frame(t(counts))
+counts<-as.data.frame(counts)%>%rownames_to_column("Cell")
+counts<-mutate(counts,Batch = sim1$Batch,.after = "Cell")
+colData(sim1)[3]$Group
+counts<-mutate(Group = colData(sim1)[3]$Group,counts)
+counts
+write.csv(counts, file = "C:/Users/user/Desktop/THESIS YLIKO/batch13.txt")
+
+```
+
